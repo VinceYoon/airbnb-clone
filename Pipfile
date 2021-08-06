@@ -8,6 +8,7 @@ django = "==3.2.6"
 pycountry = "*"
 pillow = "*"
 python-dotenv = "*"
+django-countries = "*"
 
 [dev-packages]
 flake8 = "*"

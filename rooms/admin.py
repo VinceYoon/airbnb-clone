@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.safestring import mark_safe
 from . import models
 
 
@@ -16,10 +17,23 @@ class ItemAdmin(admin.ModelAdmin):
 class PhotoAdmin(admin.ModelAdmin):
     """Photo Admin"""
 
+    list_display = ("__str__", "get_thumbnail")
+
+    def get_thumbnail(self, obj):
+        return mark_safe(f'<img width="50px" src="{obj.file.url}" />')
+
+    get_thumbnail.short_description = "Thumbnail"
+
+
+class PhtoInline(admin.StackedInline):
+    model = models.Photo
+
 
 @admin.register(models.Room)
 class RoomAdmin(admin.ModelAdmin):
     """Room Admin"""
+
+    inlines = (PhtoInline,)
 
     fieldsets = (
         (
@@ -83,7 +97,9 @@ class RoomAdmin(admin.ModelAdmin):
         "check_out",
         "instant_book",
         "count_amenities",
+        "count_facilities",
         "count_photos",
+        "total_rating",
     )
 
     list_filter = (
@@ -97,12 +113,23 @@ class RoomAdmin(admin.ModelAdmin):
         "country",
     )
 
+    raw_id_fields = ("host",)
+
+    search_fields = ("=city", "^host__username")
+
+    filter_horizontal = ("amenities", "facilities", "house_rules")
+
     def count_amenities(self, obj):
         return obj.amenities.count()
 
-    count_amenities.short_description = "Amenity Count"
+    count_amenities.short_description = "Number of Amenities"
+
+    def count_facilities(self, obj):
+        return obj.facilities.count()
+
+    count_facilities.short_description = "Number of Facilities"
 
     def count_photos(self, obj):
         return obj.photos.count()
 
-    count_photos.short_description = "Photo Count"
+    count_photos.short_description = "Number of Photos"

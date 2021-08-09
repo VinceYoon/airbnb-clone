@@ -13,4 +13,4 @@ class MessageAdmin(admin.ModelAdmin):
 class ConversationAdmin(admin.ModelAdmin):
     """Conversation Admin"""
 
-    list_display = ("__str__",)
+    list_display = ("__str__", "count_messages", "count_participants")

@@ -8,7 +8,6 @@ from users.models import User
 
 
 NAME = "users"
-COUNT = 0
 
 
 class Command(BaseCommand):
@@ -16,7 +15,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument(
-            "--number", default=1, type=int, help="Number of users to create"
+            "--number", default=1, type=int, help="Number of {NAME} to create"
         )
         parser.add_argument("--type", type=str, help="User Type")
 
@@ -72,7 +71,7 @@ def get_seed_avatar_img_list():
     for info in org_info_list:
         if not str(info.filename).startswith("__MACOSX/"):
             file = img_zip.open(info)
-            ko = DjangoFile(file)
-            avatar_img_list.append(ko)
+            img = DjangoFile(file)
+            avatar_img_list.append(img)
 
     return avatar_img_list

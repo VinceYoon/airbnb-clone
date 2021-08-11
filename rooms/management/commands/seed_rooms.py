@@ -30,10 +30,15 @@ class Command(BaseCommand):
             self.stdout.write(self.style.ERROR("Error:" + repr(error)))
 
 
+def clear_data():
+    room_models.Room.objects.all().delete()
+
+
 def run_seed_room(number):
+    clear_data()
     room_images = get_seed_room_img_list()
     seeder = Seed.seeder()
-    all_users = user_models.User.objects.all()
+    all_users = user_models.User.objects.all().exclude(is_superuser=True)
     room_types = room_models.RoomType.objects.all()
     amenities = room_models.Amenity.objects.all()
     facilities = room_models.Facility.objects.all()

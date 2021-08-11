@@ -26,9 +26,14 @@ class Command(BaseCommand):
             self.stdout.write(self.style.ERROR("Error:" + repr(error)))
 
 
+def clear_data():
+    Review.objects.all().delete()
+
+
 def run_seed_reviews(number):
+    clear_data()
     seeder = Seed.seeder()
-    users = user_models.User.objects.all()
+    users = user_models.User.objects.all().exclude(is_superuser=True)
     rooms = room_models.Room.objects.all()
     seeder.add_entity(
         Review,

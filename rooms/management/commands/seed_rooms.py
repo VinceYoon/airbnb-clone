@@ -4,7 +4,9 @@ from django.core.management.base import BaseCommand
 from django.core.files import File as DjangoFile
 from django.contrib.admin.utils import flatten
 from django.conf import settings
+
 from django_seed import Seed
+from cities_light.models import City
 from rooms import models as room_models
 from users import models as user_models
 
@@ -43,12 +45,13 @@ def run_seed_room(number):
     amenities = room_models.Amenity.objects.all()
     facilities = room_models.Facility.objects.all()
     house_rules = room_models.HouseRule.objects.all()
+    cities = City.objects.all()
 
     seeder.add_entity(
         room_models.Room,
         number,
         {
-            "name": lambda x: seeder.faker.address(),
+            "name": lambda x: seeder.faker.street_address(),
             "host": lambda x: random.choice(all_users),
             "room_type": lambda x: random.choice(room_types),
             "guests": lambda x: random.randint(1, 5),
@@ -56,12 +59,22 @@ def run_seed_room(number):
             "bedrooms": lambda x: random.randint(1, 5),
             "beds": lambda x: random.randint(1, 5),
             "baths": lambda x: random.randint(1, 5),
+            "country": lambda x: random.choice(cities).country,
+            "city": lambda x: random.choice(cities),
+            "address": lambda x: seeder.faker.street_address(),
         },
     )
     rooms = seeder.execute()
     room_ids = flatten(list(rooms.values()))
     for room_id in room_ids:
         room = room_models.Room.objects.get(pk=room_id)
+
+        country = room.country
+        filtered_cities = cities.filter(country=country)
+        room.city = random.choice(filtered_cities)
+        room.name = room.address + "|" + room.city.name + "|" + room.country.name
+        room.save()
+
         for i in range(random.randint(4, 6)):
             room_models.Photo.objects.create(
                 caption=seeder.faker.sentence(),

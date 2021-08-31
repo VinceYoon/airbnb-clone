@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
+from django_admin_listfilter_dropdown.filters import RelatedDropdownFilter
 from . import models
 
 
@@ -109,8 +110,8 @@ class RoomAdmin(admin.ModelAdmin):
         "amenities",
         "facilities",
         "house_rules",
-        "city",
-        "country",
+        ("country", RelatedDropdownFilter),
+        ("city", RelatedDropdownFilter),
     )
 
     raw_id_fields = ("host",)

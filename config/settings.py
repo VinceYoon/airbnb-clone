@@ -47,6 +47,9 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     "django_countries",
     "django_seed",
+    "cities_light",
+    "smart_selects",
+    "django_admin_listfilter_dropdown",
 ]
 
 PROJECT_APPS = [

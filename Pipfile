@@ -10,6 +10,9 @@ pillow = "*"
 python-dotenv = "*"
 django-countries = "*"
 django-seed = "*"
+django-cities-light = "*"
+django-smart-selects = "*"
+django-admin-list-filter-dropdown = "*"
 
 [dev-packages]
 flake8 = "*"

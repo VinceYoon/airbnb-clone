@@ -1,5 +1,8 @@
 from django.db import models
-from django_countries.fields import CountryField
+
+# from django.urls import reverse
+from cities_light.models import Country, City
+from smart_selects.db_fields import ChainedForeignKey
 from core import models as core_models
 
 
@@ -47,8 +50,10 @@ class Room(core_models.TimeStampedModel):
 
     name = models.CharField(max_length=140)
     description = models.TextField()
-    country = CountryField()
-    city = models.CharField(max_length=80)
+    country = models.ForeignKey(Country, on_delete=models.CASCADE)
+    city = ChainedForeignKey(
+        City, chained_field="country", chained_model_field="country"
+    )
     address = models.CharField(max_length=140)
     price = models.IntegerField()
     guests = models.IntegerField(help_text="how many people will be staying?")
@@ -73,9 +78,8 @@ class Room(core_models.TimeStampedModel):
     def __str__(self):
         return self.name
 
-    def save(self, *args, **kwargs):
-        self.city = str.title(self.city)
-        super().save(*args, **kwargs)
+    # def get_absolute_url(self):
+    #     return reverse("rooms:detail", kwargs={"pk": self.pk})
 
     def total_rating(self):
         reviews = self.reviews.all()

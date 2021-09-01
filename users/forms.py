@@ -19,3 +19,44 @@ class LoginForm(forms.Form):
                 self.add_error("password", forms.ValidationError("Password is wrong"))
         except models.User.DoesNotExist:
             self.add_error("email", forms.ValidationError("User does not exist"))
+
+
+class SignupForm(forms.Form):
+    """Signup Form"""
+
+    first_name = forms.CharField(max_length=50)
+    last_name = forms.CharField(max_length=50)
+    email = forms.EmailField()
+    password = forms.CharField(widget=forms.PasswordInput)
+    confirm_password = forms.CharField(widget=forms.PasswordInput)
+
+    def clean(self):
+        email = self.cleaned_data.get("email")
+        password = self.cleaned_data.get("password")
+        confirm_password = self.cleaned_data.get("confirm_password")
+        try:
+            models.User.objects.get(email=email)
+            self.add_error(
+                "email", forms.ValidationError("User already exists with this Email")
+            )
+        except models.User.DoesNotExist:
+            if password != confirm_password:
+                self.add_error(
+                    "password",
+                    forms.ValidationError("Password confirmation does not match"),
+                )
+            else:
+                return self.cleaned_data
+
+    def save(self):
+        first_name = self.cleaned_data.get("first_name")
+        last_name = self.cleaned_data.get("last_name")
+        email = self.cleaned_data.get("email")
+        password = self.cleaned_data.get("password")
+        models.User.objects.create_user(
+            email,
+            email=email,
+            password=password,
+            first_name=first_name,
+            last_name=last_name,
+        )

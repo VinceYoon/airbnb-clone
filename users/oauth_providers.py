@@ -55,10 +55,6 @@ class OauthProvider(object):
         access_token_url += (
             "/access_token" if self.social_client == "github" else "/token"
         )
-        # if self.social_client == "github":
-        #     access_token_url += "/access_token"
-        # else:
-        #     access_token_url += "/token"
 
         return access_token_url
 

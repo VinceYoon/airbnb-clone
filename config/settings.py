@@ -154,9 +154,23 @@ AUTH_USER_MODEL = "users.User"
 MEDIA_ROOT = os.path.join(BASE_DIR, "uploads")
 MEDIA_URL = "/img/"
 
+BASE_URL = "http://127.0.0.1:8000"
+
 # Email
 EMAIL_HOST = os.environ["EMAIL_HOST"]
 EMAIL_PORT = os.environ["EMAIL_PORT"]
 EMAIL_HOST_USER = os.environ["EMAIL_HOST_USER"]
 EMAIL_HOST_PASSWORD = os.environ["EMAIL_HOST_PASSWORD"]
 EMAIL_FROM = os.environ["EMAIL_FROM"]
+
+# Oauth
+# GITHUB
+GITHUB_CLIENT_ID = os.environ["GITHUB_CLIENT_ID"]
+GITHUB_CLIENT_SECRET = os.environ["GITHUB_CLIENT_SECRET"]
+GITHUB_OAUTH = "https://github.com/login/oauth/"
+GITHUB_USER = "https://api.github.com/user"
+# Google
+GOOGLE_CLIENT_ID = os.environ["GOOGLE_CLIENT_ID"]
+GOOGLE_CLIENT_SECRET = os.environ["GOOGLE_CLIENT_SECRET"]
+GOOGLE_OAUTH = "https://accounts.google.com/o/oauth2"
+GOOGLE_USER = "https://www.googleapis.com/oauth2/v3/userinfo"

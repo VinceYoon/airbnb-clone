@@ -13,6 +13,7 @@ django-seed = "*"
 django-cities-light = "*"
 django-smart-selects = "*"
 django-admin-list-filter-dropdown = "*"
+requests = "*"
 
 [dev-packages]
 flake8 = "*"
